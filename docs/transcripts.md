@@ -1,5 +1,7 @@
 # Transcripts and text-based editing
 
+For gateway-based transcription and AI decoupage, see [AI editing with OmniRoute](ai.md).
+
 FilmCraft's Text panel ▸ **Transcript** tab shows the dialogue of the open sequence as text. Select
 words to mark In/Out, then extract or lift them; remove filler words and long pauses in one step;
 turn the transcript into captions. Every action is an engine command (`transcript.*`), so the CLI,

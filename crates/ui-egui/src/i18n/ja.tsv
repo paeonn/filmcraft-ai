@@ -3616,3 +3616,38 @@
 	Open a sequence to search its graphics	シーケンスを開くとグラフィックスを検索できます
 	No text graphics in this sequence. Add text with the Type tool.	このシーケンスにはテキストのグラフィックスがありません。文字ツールでテキストを追加してください。
 	No matching text.	一致するテキストはありません。
+
+	AI	AI
+	AI assistant	AIアシスタント
+	Audio and prompts are sent to your configured AI provider.	音声と指示は設定したAIプロバイダーに送信されます。
+	OmniRoute connection	OmniRoute接続
+	Gateway URL	ゲートウェイURL
+	Text model	テキストモデル
+	API key (this session only)	APIキー（このセッションのみ）
+	Save connection	接続を保存
+	Forget API key	APIキーを消去
+	List available models	利用可能なモデルを一覧表示
+	Caption source	字幕のソース
+	Selected media	選択したメディア
+	Language (auto, pt, en…)	言語（auto、pt、en…）
+	Generate captions	字幕を生成
+	Describe your edit or animation	編集やアニメーションの内容を入力
+	Suggest decoupage	編集候補を提案
+	Create motion graphics	モーショングラフィックスを作成
+	Generating…	生成中…
+	Ready to review	確認できます
+	Generation failed	生成に失敗しました
+	The project changed. Generate a new result before applying.	プロジェクトが変更されました。適用する前に再生成してください。
+	Review result	結果を確認
+	Apply result (undoable)	結果を適用（取り消し可能）
+	Cancel request	リクエストをキャンセル
+	Start: frame {start} · Duration: {duration} frames	開始: フレーム{start} · 長さ: {duration}フレーム
+	Configure OmniRoute	OmniRouteを設定
+	List AI Models	AIモデルを一覧表示
+	Generate AI Captions	AI字幕を生成
+	Plan AI Decoupage	AI編集を計画
+	Plan AI Motion Graphics	AIモーショングラフィックスを計画
+	Inspect AI Result	AI結果を確認
+	Cancel AI Request	AIリクエストをキャンセル
+	Apply AI Result	AI結果を適用
+	Applied	適用済み

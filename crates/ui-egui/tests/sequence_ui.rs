@@ -19,6 +19,25 @@ struct Driver {
     snapshots: Option<std::path::PathBuf>,
 }
 
+#[test]
+fn ai_tab_exposes_configuration_and_review_without_network_requests() {
+    let mut d = Driver::demo();
+    d.ok("ui.panel.show", json!({"panel":"Text"}));
+    d.frames(3);
+    d.click("text.tab.AI");
+    assert_eq!(d.app().ui.text_tab, "AI");
+    assert!(!d.ids("text.ai.prompt").is_empty());
+    assert!(!d.ids("text.ai.captions").is_empty());
+    assert!(!d.ids("text.ai.decoupage").is_empty());
+    assert!(!d.ids("text.ai.graphics").is_empty());
+    d.snapshot("omniroute-ai-panel", "text.ai.");
+    d.click("text.ai.connection");
+    assert!(!d.ids("text.ai.url").is_empty());
+    assert!(!d.ids("text.ai.apiKey").is_empty());
+    d.snapshot("omniroute-ai-connection", "text.ai.");
+    assert_eq!(d.exec("ai.status", json!({}))["state"], "idle");
+}
+
 impl Driver {
     fn demo() -> Self {
         let mut session = Session::default();

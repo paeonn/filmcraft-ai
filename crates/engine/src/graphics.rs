@@ -97,6 +97,25 @@ pub(crate) fn graphic_source(p: &mut filmcraft_project::Project, w: u32, h: u32,
 /// Place a new graphic clip holding `layer` at the playhead: on the first video track above the
 /// topmost clip at the playhead that is free for the duration (a track is added if needed).
 fn new_graphic_clip(s: &mut Session, cmd: &str, layer: filmcraft_project::EffectInstance, name: &str, p: &Value) -> Result<ClipId> {
+    // Frame-based callers (including AI plans) retain exact integer edit time.
+    let exact_duration = p
+        .get("durationFrames")
+        .map(|v| {
+            let frames = v.as_u64().filter(|n| (1..=1_000_000).contains(n)).ok_or_else(|| bad(cmd, "durationFrames must be 1–1000000"))?;
+            let fd = s.sequence_rate().frame_duration().0;
+            if fd <= 0 {
+                return Err(bad(cmd, "invalid sequence frame rate"));
+            }
+            let ticks = i64::try_from(frames).ok().and_then(|n| n.checked_mul(fd)).ok_or_else(|| bad(cmd, "graphic duration overflow"))?;
+            Ok(Tick(ticks))
+        })
+        .transpose()?;
+    if let Some(duration) = exact_duration {
+        let start = time_p(s, p, "").unwrap_or_else(|| s.playhead());
+        if start.0.checked_add(duration.0).is_none() {
+            return Err(bad(cmd, "graphic end time overflow"));
+        }
+    }
     let seconds = f64_p(p, "seconds").unwrap_or(5.0).max(0.01);
     // Here `seconds` is duration, not the generic time parser's placement alias.
     let mut placement = p.clone();
@@ -105,7 +124,7 @@ fn new_graphic_clip(s: &mut Session, cmd: &str, layer: filmcraft_project::Effect
     }
     place_video_clip(s, cmd, name, &placement, "New Graphic", vec![layer], move |pr, (w, h, rate)| {
         let src = graphic_source(pr, w, h, rate);
-        (src, rate.snap_nearest(Tick::from_seconds_f64(seconds)).max(rate.frame_duration()))
+        (src, exact_duration.unwrap_or_else(|| rate.snap_nearest(Tick::from_seconds_f64(seconds)).max(rate.frame_duration())))
     })
 }
 
@@ -790,7 +809,7 @@ fn menu_commands() -> Vec<CommandSpec> {
             "Rectangle",
             &["Graphics and Titles", "New Layer"],
             Some("Cmd+Alt+R"),
-            r#"{"position":[x,y]?,"size":[w,h]=[400,200],"clip":id?,"seconds":f64=5,"track":index?,"time":ticks?}"#,
+            r#"{"position":[x,y]?,"size":[w,h]=[400,200],"clip":id?,"seconds":f64=5,"durationFrames":1..1000000? (overrides seconds),"track":index?,"time":ticks?}"#,
             has_seq,
             |s, p| new_shape_cmd(s, p, "rectangle"),
         ),
@@ -799,7 +818,7 @@ fn menu_commands() -> Vec<CommandSpec> {
             "Ellipse",
             &["Graphics and Titles", "New Layer"],
             Some("Cmd+Alt+E"),
-            r#"{"position":[x,y]?,"size":[w,h]=[400,200],"clip":id?,"seconds":f64=5,"track":index?,"time":ticks?}"#,
+            r#"{"position":[x,y]?,"size":[w,h]=[400,200],"clip":id?,"seconds":f64=5,"durationFrames":1..1000000? (overrides seconds),"track":index?,"time":ticks?}"#,
             has_seq,
             |s, p| new_shape_cmd(s, p, "ellipse"),
         ),
@@ -808,7 +827,7 @@ fn menu_commands() -> Vec<CommandSpec> {
             "Polygon",
             &["Graphics and Titles", "New Layer"],
             None,
-            r#"{"position":[x,y]?,"size":[w,h]=[300,300],"sides":n=6,"clip":id?,"seconds":f64=5,"track":index?,"time":ticks?}"#,
+            r#"{"position":[x,y]?,"size":[w,h]=[300,300],"sides":n=6,"clip":id?,"seconds":f64=5,"durationFrames":1..1000000? (overrides seconds),"track":index?,"time":ticks?}"#,
             has_seq,
             |s, p| {
                 let mut q = if p.is_object() { p.clone() } else { json!({}) };
@@ -957,7 +976,7 @@ pub fn commands() -> Vec<CommandSpec> {
             "Text",
             &["Graphics and Titles", "New Layer"],
             Some("Cmd+T"),
-            r#"{"text":str="New Text","position":[x,y]? (point text: its alignment point on the first baseline; with `box`: the box's top-left corner),"box":[w,h]? (paragraph text wrapped in a box this size),"clip":id?,"newClip":bool?,"vertical":bool=false,"size":px=100,"font":str?,"fontStyle":str?,"seconds":f64=5,"track":index?,"time":ticks?}"#,
+            r#"{"text":str="New Text","position":[x,y]? (point text: its alignment point on the first baseline; with `box`: the box's top-left corner),"box":[w,h]? (paragraph text wrapped in a box this size),"clip":id?,"newClip":bool?,"vertical":bool=false,"size":px=100,"font":str?,"fontStyle":str?,"seconds":f64=5,"durationFrames":1..1000000? (overrides seconds),"track":index?,"time":ticks?}"#,
             has_seq,
             |s, p| {
                 let text = str_p(p, "text").unwrap_or("New Text").to_string();
@@ -1000,7 +1019,7 @@ pub fn commands() -> Vec<CommandSpec> {
             "Shape",
             &[],
             None,
-            r#"{"shape":"rectangle|ellipse|polygon|path","position":[x,y]? (the shape's centre),"size":[w,h]=[400,200],"points":[[x,y],…]?,"clip":id? (add the shape to this graphic),"seconds":f64=5,"track":index?,"time":ticks?}"#,
+            r#"{"shape":"rectangle|ellipse|polygon|path","position":[x,y]? (the shape's centre),"size":[w,h]=[400,200],"points":[[x,y],…]?,"clip":id? (add the shape to this graphic),"seconds":f64=5,"durationFrames":1..1000000? (overrides seconds),"track":index?,"time":ticks?}"#,
             has_seq,
             |s, p| {
                 let shape = str_p(p, "shape").unwrap_or("rectangle").to_ascii_lowercase();

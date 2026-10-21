@@ -167,6 +167,8 @@ pub struct Preferences {
     pub labels: settings::LabelPrefs,
     pub media: MediaPrefs,
     pub media_analysis: settings::MediaAnalysisPrefs,
+    /// OpenAI-compatible gateway configuration; credentials are session-only.
+    pub ai: crate::ai::Config,
     pub media_cache: settings::MediaCachePrefs,
     pub memory: settings::MemoryPrefs,
     pub playback: PlaybackPrefs,
@@ -197,6 +199,7 @@ impl Default for Preferences {
             labels: Default::default(),
             media: Default::default(),
             media_analysis: Default::default(),
+            ai: Default::default(),
             media_cache: Default::default(),
             memory: Default::default(),
             playback: Default::default(),

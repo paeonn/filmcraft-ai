@@ -3585,3 +3585,40 @@
 	Open a sequence to search its graphics	Abra uma sequência para pesquisar nos gráficos dela
 	No text graphics in this sequence. Add text with the Type tool.	Esta sequência não tem gráficos com texto. Adicione texto com a ferramenta Texto.
 	No matching text.	Nenhum texto corresponde.
+
+	AI	IA
+	AI assistant	Assistente de IA
+	Audio and prompts are sent to your configured AI provider.	O áudio e as instruções são enviados ao provedor de IA configurado.
+	OmniRoute connection	Conexão com OmniRoute
+	Gateway URL	Endereço do gateway
+	Text model	Modelo de texto
+	API key (this session only)	Chave de API (somente nesta sessão)
+	Save connection	Salvar conexão
+	Forget API key	Esquecer chave de API
+	List available models	Listar modelos disponíveis
+	Caption source	Mídia para legendar
+	Selected media	Mídia selecionada
+	Language (auto, pt, en…)	Idioma (auto, pt, en…)
+	Generate captions	Gerar legendas
+	Describe your edit or animation	Descreva sua edição ou animação
+	Suggest decoupage	Sugerir decupagem
+	Create motion graphics	Criar gráficos animados
+	Generating…	Gerando…
+	Ready to review	Pronto para revisar
+	Generation failed	Falha na geração
+	The project changed. Generate a new result before applying.	O projeto mudou. Gere um novo resultado antes de aplicar.
+	Review result	Revisar resultado
+	Apply result (undoable)	Aplicar resultado (pode ser desfeito)
+	Cancel request	Cancelar solicitação
+
+	Start: frame {start} · Duration: {duration} frames	Início: quadro {start} · Duração: {duration} quadros
+
+	Configure OmniRoute	Configurar OmniRoute
+	List AI Models	Listar modelos de IA
+	Generate AI Captions	Gerar legendas com IA
+	Plan AI Decoupage	Planejar decupagem com IA
+	Plan AI Motion Graphics	Planejar gráficos animados com IA
+	Inspect AI Result	Inspecionar resultado de IA
+	Cancel AI Request	Cancelar solicitação de IA
+	Apply AI Result	Aplicar resultado de IA
+	Applied	Aplicado

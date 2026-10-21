@@ -1930,11 +1930,14 @@ dependencies = [
  "filmcraft-text",
  "filmcraft-time",
  "filmcraft-tts",
+ "http",
  "image",
  "log",
+ "rustls-rustcrypto",
  "serde",
  "serde_json",
  "thiserror 2.0.21",
+ "ureq",
  "web-time",
 ]
 

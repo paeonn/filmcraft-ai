@@ -1,5 +1,8 @@
 # Graphics
 
+Text panel ▸ AI can propose native animated text and shapes through an OpenAI-compatible
+gateway. See [AI editing with OmniRoute](ai.md) for configuration, review and limits.
+
 FilmCraft's graphics work like Premiere's Essential Graphics: a **graphic clip** on a video track
 holds **text** and **shape** layers. Text is set by the text engine in `crates/text`
 ([README](../crates/text/README.md)): bundled OFL fonts plus system fonts, OpenType shaping with
@@ -82,6 +85,9 @@ The GPU plan receives one tight image per graphic clip and places it with a tran
 Timecode and Clip Name effects also draw with the text engine.
 
 ## Commands
+
+New graphic clips also accept `durationFrames` (1–1,000,000), which overrides `seconds`
+and preserves exact frame timing. AI graphic plans use this integer path.
 
 | Command | Menu / shortcut | Params |
 |---|---|---|

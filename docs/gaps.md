@@ -217,7 +217,10 @@ platforms** G4, G9, G17; **performance** G16; **ecosystem** G11; **measurement**
   model; not reachable locally), media-intelligence search, caption translation, model-based
   Enhance Speech, Auto Reframe beyond heuristics, auto colour, Auto-Tag Audio Types.
 - **Have:** local Whisper transcription (off in releases, G19), Kokoro-82M text-to-speech
-  narration (#278), scene edit detection, colour match.
+  narration (#278), scene edit detection, colour match. Desktop [OmniRoute workflows](ai.md)
+  provide remote word-timed transcription/captions, transcript-based decoupage and native
+  text/shape position animation, with review and undo. They require configured capable providers;
+  they do not supply visual media search, generative video or local models for these gaps.
 - **Needs:** openly licensed models we can ship. **150–300 h.**
 
 ## G13. Delivery formats
@@ -304,7 +307,8 @@ platforms** G4, G9, G17; **performance** G16; **ecosystem** G11; **measurement**
 ## G19. Speech to text off in release builds
 
 - **Missing:** the `whisper` feature is off by default and in releases, so Transcribe Sequence,
-  text-based editing and auto captions need a source build.
+  local recognition needs a source build. Imported transcripts and the desktop
+  [OmniRoute workflow](ai.md) can drive text-based editing and captions without local Whisper.
 - **Estimate:** 5–10 h (model download UX, licence check).
 
 ## G20. The web app shell

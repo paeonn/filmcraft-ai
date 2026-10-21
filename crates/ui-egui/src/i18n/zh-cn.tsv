@@ -3592,3 +3592,38 @@
 	Open a sequence to search its graphics	打开序列以搜索其中的图形
 	No text graphics in this sequence. Add text with the Type tool.	此序列中没有文本图形。请用文字工具添加文本。
 	No matching text.	没有匹配的文本。
+
+	AI	AI
+	AI assistant	AI 助手
+	Audio and prompts are sent to your configured AI provider.	音频和提示词会发送到已配置的 AI 提供商。
+	OmniRoute connection	OmniRoute 连接
+	Gateway URL	网关地址
+	Text model	文本模型
+	API key (this session only)	API 密钥（仅限本次会话）
+	Save connection	保存连接
+	Forget API key	清除 API 密钥
+	List available models	列出可用模型
+	Caption source	字幕来源
+	Selected media	所选媒体
+	Language (auto, pt, en…)	语言（auto、pt、en…）
+	Generate captions	生成字幕
+	Describe your edit or animation	描述编辑或动画需求
+	Suggest decoupage	建议剪辑片段
+	Create motion graphics	创建动态图形
+	Generating…	正在生成…
+	Ready to review	可供审阅
+	Generation failed	生成失败
+	The project changed. Generate a new result before applying.	项目已更改。请重新生成结果后再应用。
+	Review result	审阅结果
+	Apply result (undoable)	应用结果（可撤销）
+	Cancel request	取消请求
+	Start: frame {start} · Duration: {duration} frames	开始：第 {start} 帧 · 时长：{duration} 帧
+	Configure OmniRoute	配置 OmniRoute
+	List AI Models	列出 AI 模型
+	Generate AI Captions	生成 AI 字幕
+	Plan AI Decoupage	规划 AI 剪辑
+	Plan AI Motion Graphics	规划 AI 动态图形
+	Inspect AI Result	查看 AI 结果
+	Cancel AI Request	取消 AI 请求
+	Apply AI Result	应用 AI 结果
+	Applied	已应用
