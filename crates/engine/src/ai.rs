@@ -519,19 +519,21 @@ fn validate_layers(layers: &[Layer]) -> std::result::Result<(), String> {
 fn status(s: &mut Session, params: &Value) -> Result<Value> {
     fields(params, &[])?;
     let Some(p) = &s.ai.pending else {
-        return Ok(json!({"state":"idle"}));
+        return Ok(json!({"state":"idle", "hasKey": !s.ai.key.is_empty()}));
     };
     if p.cancel.load(Ordering::Relaxed) {
-        return Ok(json!({"state":"cancelled"}));
+        return Ok(json!({"state":"cancelled", "hasKey": !s.ai.key.is_empty()}));
     }
     let stale = !Arc::ptr_eq(&p.project, &s.project) || p.sequence != s.state.active_sequence;
-    Ok(match lock(&p.result).as_ref() {
+    let mut result = match lock(&p.result).as_ref() {
         None => json!({"state":"running"}),
         Some(Err(e)) => json!({"state":"failed", "error":e}),
         Some(Ok(plan)) => {
             json!({"state":if p.applied {"applied"} else {"ready"},"stale":stale && !p.applied && !matches!(plan, Plan::Models { .. }),"plan":plan})
         }
-    })
+    };
+    result["hasKey"] = json!(!s.ai.key.is_empty());
+    Ok(result)
 }
 
 fn cancel(s: &mut Session, params: &Value) -> Result<Value> {

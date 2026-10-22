@@ -11,6 +11,7 @@ struct Draft {
     language: String,
     item: Option<u64>,
     status: serde_json::Value,
+    connection_message: Option<String>,
 }
 
 pub fn show(app: &mut FilmcraftApp, ui: &mut egui::Ui, rect: Rect) {
@@ -24,6 +25,10 @@ pub fn show(app: &mut FilmcraftApp, ui: &mut egui::Ui, rect: Rect) {
     let mut actions = Vec::new();
     egui::ScrollArea::vertical().show(&mut child, |ui| {
         ui.heading(tl!("AI assistant"));
+        ui.label(tl!("Local Whisper transcribes on this computer without an API key."));
+        if button(app, ui, "localWhisper", tl!("Use local Whisper"), true) {
+            app.ui.text_tab = "Transcript".into();
+        }
         ui.label(tl!("Audio and prompts are sent to your configured AI provider."));
         let connection = ui.collapsing(tl!("OmniRoute connection"), |ui| {
             for (label, name, value) in [
@@ -53,6 +58,14 @@ pub fn show(app: &mut FilmcraftApp, ui: &mut egui::Ui, rect: Rect) {
             }
         });
         app.auto.add("text.ai.connection", connection.header_response.rect, "OmniRoute connection");
+        if let Some(message) = &draft.connection_message {
+            let r = ui.label(message);
+            app.auto.add("text.ai.connectionStatus", r.rect, message);
+        }
+        let key_label =
+            if draft.status["hasKey"] == true { tl!("API key loaded for this session.") } else { tl!("No API key loaded. Local Whisper does not need one.") };
+        let r = ui.label(key_label);
+        app.auto.add("text.ai.keyStatus", r.rect, key_label);
         ui.separator();
         ui.label(tl!("Caption source"));
         let label = draft
@@ -74,7 +87,7 @@ pub fn show(app: &mut FilmcraftApp, ui: &mut egui::Ui, rect: Rect) {
         app.auto.add("text.ai.language", r.rect, "Language");
         let running = draft.status["state"] == "running";
         let has_sequence = app.session.active_sequence().is_some();
-        if button(app, ui, "captions", tl!("Generate captions"), has_sequence && !running) {
+        if button(app, ui, "captions", tl!("Generate captions via gateway"), has_sequence && !running) {
             let mut p = json!({"language":draft.language});
             if let Some(item) = draft.item {
                 p["item"] = json!(item);
@@ -168,12 +181,21 @@ pub fn show(app: &mut FilmcraftApp, ui: &mut egui::Ui, rect: Rect) {
     });
     for (command, params) in actions {
         match crate::menus::invoke(app, ui.ctx(), command, params) {
-            Ok(_) => {
+            Ok(result) => {
                 if command == "ai.configure" {
                     draft.key.clear();
+                    draft.status["hasKey"] = result["hasKey"].clone();
+                    draft.config = app.session.prefs.ai.clone();
+                    draft.connection_message = Some(tl!("Connection saved. Not tested yet.").into());
+                    ui.ctx().request_repaint();
                 }
             }
-            Err(e) => app.ui.status = e,
+            Err(e) => {
+                if command == "ai.configure" {
+                    draft.connection_message = Some(e.clone());
+                }
+                app.ui.status = e;
+            }
         }
     }
     ui.ctx().data_mut(|d| d.insert_temp(id, draft));

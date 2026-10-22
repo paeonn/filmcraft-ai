@@ -20,6 +20,41 @@ struct Driver {
 }
 
 #[test]
+fn ai_connection_confirms_saved_key_and_offers_local_whisper() {
+    let mut d = Driver::demo();
+    d.ok("ui.panel.show", json!({"panel":"Text"}));
+    d.frames(3);
+    d.click("text.tab.AI");
+    d.click("text.ai.connection");
+    d.click("text.ai.apiKey");
+    d.ok("ui.type", json!({"text":"synthetic-session-key"}));
+    d.click("text.ai.configure");
+    assert!(d.label("text.ai.connectionStatus").contains("saved"));
+    assert_eq!(d.exec("ai.status", json!({}))["hasKey"], true);
+    d.snapshot("omniroute-saved-connection", "text.ai.");
+    d.click("text.ai.configure");
+    assert_eq!(d.exec("ai.status", json!({}))["hasKey"], true, "saving an empty draft retains the stored key");
+    d.click("text.ai.clearKey");
+    assert_eq!(d.exec("ai.status", json!({}))["hasKey"], false);
+    d.click("text.ai.apiKey");
+    d.ok("ui.type", json!({"text":"synthetic-retained-key"}));
+    d.click("text.ai.url");
+    d.ok("ui.key", json!({"key":"Ctrl+A"}));
+    d.ok("ui.type", json!({"text":"file:///invalid"}));
+    d.click("text.ai.configure");
+    assert!(!d.label("text.ai.connectionStatus").contains("saved"));
+    assert_eq!(d.exec("ai.status", json!({}))["hasKey"], false);
+    d.click("text.ai.url");
+    d.ok("ui.key", json!({"key":"Ctrl+A"}));
+    d.ok("ui.type", json!({"text":"http://127.0.0.1:20128/v1"}));
+    d.click("text.ai.configure");
+    assert_eq!(d.exec("ai.status", json!({}))["hasKey"], true, "a failed save retains the entered key for retry");
+    d.click("text.ai.localWhisper");
+    assert_eq!(d.app().ui.text_tab, "Transcript");
+    assert_eq!(d.exec("ai.status", json!({}))["state"], "idle", "local transcription does not start a gateway request");
+}
+
+#[test]
 fn ai_tab_exposes_configuration_and_review_without_network_requests() {
     let mut d = Driver::demo();
     d.ok("ui.panel.show", json!({"panel":"Text"}));

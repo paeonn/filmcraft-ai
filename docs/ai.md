@@ -6,6 +6,18 @@ a speech model, and your gateway API key under **OmniRoute connection**, then **
 **List available models** queries the gateway's `/models` catalogue; copy the desired model IDs
 into the corresponding fields. Provider capability varies: a chat model is not a speech model.
 
+For **local Whisper**, choose **Use local Whisper** in this tab. It opens **Transcript**:
+click **Transcribe**, then **Create captions** in the transcript toolbar. This path needs no
+API key and sends no audio to a provider. Build the desktop app with
+`cargo build --release -p filmcraft --features whisper`; the `whisper-base` model must be installed
+in the application's model directory (see [local transcription](transcripts.md)). The AI tab's
+**Generate captions via gateway** button uses the configured remote speech model instead.
+
+Saving a connection confirms that the settings were saved, without testing the provider.
+The key field clears after a successful save; **API key loaded for this session** confirms that
+the key is still held in memory. Saving again with the field empty retains that key, unless
+the gateway address changes. A save failure keeps the entered key and shows the error in the panel.
+
 The address and model choices are saved in application preferences. The API key stays in memory
 for this session, never in project files, preferences or the command journal. Enter it again after
 restarting. **Forget API key** clears it. Remote gateways require HTTPS; HTTP is accepted only

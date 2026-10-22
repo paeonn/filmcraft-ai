@@ -3622,3 +3622,9 @@
 	Cancel AI Request	Cancelar solicitação de IA
 	Apply AI Result	Aplicar resultado de IA
 	Applied	Aplicado
+	Local Whisper transcribes on this computer without an API key.	O Whisper local transcreve neste computador, sem chave de API.
+	Use local Whisper	Usar Whisper local
+	API key loaded for this session.	Chave de API carregada para esta sessão.
+	No API key loaded. Local Whisper does not need one.	Nenhuma chave de API carregada. O Whisper local não precisa de chave.
+	Connection saved. Not tested yet.	Conexão salva. Ainda não testada.
+	Generate captions via gateway	Gerar legendas pelo gateway
